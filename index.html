@@ -71,20 +71,28 @@
 <footer><div class="wrap">© 2026 暮らし便利帳</div></footer>
 
 <script>
-const products = [
-  {id:1,cat:"一人暮らし",title:"省スペース収納グッズ",desc:"狭い部屋でも使いやすい収納アイテムを探すための特集。",price:"商品ページで確認",url:"#"},
-  {id:2,cat:"キッチン",title:"キッチン便利グッズ",desc:"料理や後片付けの手間を減らしたい人向けのアイテム。",price:"商品ページで確認",url:"#"},
-  {id:3,cat:"掃除",title:"掃除・整理グッズ",desc:"毎日の掃除を少しラクにする便利アイテム。",price:"商品ページで確認",url:"#"},
-  {id:4,cat:"学生生活",title:"学生生活の便利グッズ",desc:"学校・勉強・通学で使いやすいアイテムをまとめます。",price:"商品ページで確認",url:"#"},
-  {id:5,cat:"PC・デスク",title:"デスク周り便利グッズ",desc:"PC作業や勉強環境を快適にするアイテム。",price:"商品ページで確認",url:"#"},
-  {id:6,cat:"旅行",title:"旅行・出張便利グッズ",desc:"荷物を整理して移動をラクにするアイテム。",price:"商品ページで確認",url:"#"}
+let products = [];
+const fallbackProducts = [
+  {id:"fallback-1",cat:"一人暮らし",title:"省スペース収納グッズ",desc:"狭い部屋でも使いやすい収納アイテム。",price:"商品ページで確認",url:"#",image:""},
+  {id:"fallback-2",cat:"キッチン",title:"キッチン便利グッズ",desc:"料理や後片付けの手間を減らす便利アイテム。",price:"商品ページで確認",url:"#",image:""},
+  {id:"fallback-3",cat:"掃除",title:"掃除・整理グッズ",desc:"毎日の掃除を少しラクにするアイテム。",price:"商品ページで確認",url:"#",image:""},
+  {id:"fallback-4",cat:"学生生活",title:"学生生活の便利グッズ",desc:"学校・勉強・通学で使いやすいアイテム。",price:"商品ページで確認",url:"#",image:""},
+  {id:"fallback-5",cat:"PC・デスク",title:"デスク周り便利グッズ",desc:"PC作業や勉強環境を快適にするアイテム。",price:"商品ページで確認",url:"#",image:""},
+  {id:"fallback-6",cat:"旅行",title:"旅行・出張便利グッズ",desc:"荷物を整理して移動をラクにするアイテム。",price:"商品ページで確認",url:"#",image:""}
 ];
 
 const state={cat:"すべて",q:""};
-const cats=["すべて",...new Set(products.map(p=>p.cat))];
 const filters=document.querySelector("#filters"),grid=document.querySelector("#grid"),empty=document.querySelector("#empty"),count=document.querySelector("#count"),search=document.querySelector("#search");
 
+function escapeHtml(value){
+  return String(value ?? "").replace(/[&<>"']/g, c => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[c]));
+}
+
 function renderFilters(){
+  const cats=["すべて",...new Set(products.map(p=>p.cat).filter(Boolean))];
+  if(!cats.includes(state.cat)) state.cat="すべて";
   filters.innerHTML="";
   cats.forEach(cat=>{
     const b=document.createElement("button");
@@ -93,24 +101,53 @@ function renderFilters(){
     filters.appendChild(b);
   });
 }
+
 function render(){
   const q=state.q.trim().toLowerCase();
-  const list=products.filter(p=>(state.cat==="すべて"||p.cat===state.cat)&&(!q||(p.title+" "+p.desc+" "+p.cat).toLowerCase().includes(q)));
+  const list=products.filter(p=>
+    (state.cat==="すべて"||p.cat===state.cat) &&
+    (!q||(p.title+" "+p.desc+" "+p.cat).toLowerCase().includes(q))
+  );
   grid.innerHTML="";
   count.textContent=`${list.length}件`;
   empty.style.display=list.length?"none":"block";
+
   list.forEach(p=>{
-    const card=document.createElement("article"); card.className="card";
-    card.innerHTML=`<div class="thumb" aria-label="商品画像プレースホルダー">IMAGE</div>
-      <div class="body"><div class="tag">${p.cat}</div><h3>${p.title}</h3><p>${p.desc}</p>
-      <div class="meta"><span class="price">${p.price}</span><a class="btn" href="${p.url}" target="_blank" rel="nofollow sponsored noopener">楽天で見る</a></div>
+    const card=document.createElement("article");
+    card.className="card";
+    const image = p.image
+      ? `<img src="${escapeHtml(p.image)}" alt="${escapeHtml(p.title)}" style="width:100%;height:100%;object-fit:cover;" loading="lazy">`
+      : "IMAGE";
+    const button = p.url && p.url !== "#"
+      ? `<a class="btn" href="${escapeHtml(p.url)}" target="_blank" rel="nofollow sponsored noopener">楽天で見る</a>`
+      : `<span class="btn secondary">準備中</span>`;
+    card.innerHTML=`<div class="thumb">${image}</div>
+      <div class="body"><div class="tag">${escapeHtml(p.cat)}</div>
+      <h3>${escapeHtml(p.title)}</h3><p>${escapeHtml(p.desc)}</p>
+      <div class="meta"><span class="price">${escapeHtml(p.price)}</span>${button}</div>
       <div class="affiliate">PR / アフィリエイトリンク</div></div>`;
     grid.appendChild(card);
   });
 }
+
+async function loadProducts(){
+  try{
+    const res=await fetch("./products.json?ts="+Date.now(), {cache:"no-store"});
+    if(!res.ok) throw new Error("products.json: "+res.status);
+    const data=await res.json();
+    products=Array.isArray(data.products) ? data.products : [];
+    if(!products.length) products=fallbackProducts;
+  }catch(e){
+    console.warn("商品データを読み込めませんでした。", e);
+    products=fallbackProducts;
+  }
+  renderFilters();
+  render();
+}
+
 search.addEventListener("input",e=>{state.q=e.target.value;render()});
 document.querySelector("#clear").addEventListener("click",()=>{search.value="";state.q="";render()});
-renderFilters();render();
+loadProducts();
 </script>
 </body>
 </html>
