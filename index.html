@@ -106,42 +106,63 @@ và thay bằng:
     width:100%;
   }
 
-  /* Mobile product list */
+    /* Mobile product list */
   .grid{
     grid-template-columns:1fr;
-    gap:12px;
+    gap:16px;
   }
 
   .card{
-    display:grid;
-    grid-template-columns:115px 1fr;
-    min-height:150px;
+    display:flex;
+    flex-direction:column;
   }
 
   .thumb{
-    aspect-ratio:1/1;
-    height:100%;
-    padding:6px;
+    aspect-ratio:4/3;
+    width:100%;
+    height:auto;
+    padding:8px;
   }
 
   .body{
-    padding:11px;
+    padding:14px;
     min-width:0;
   }
 
   .tag{
-    font-size:10px;
+    font-size:11px;
   }
 
   .card h3{
-    font-size:14px;
-    line-height:1.4;
-    margin:5px 0;
-
+    font-size:16px;
+    line-height:1.45;
+    margin:6px 0 8px;
     display:-webkit-box;
     -webkit-line-clamp:3;
     -webkit-box-orient:vertical;
     overflow:hidden;
+  }
+
+  .card p{
+    font-size:13px;
+    line-height:1.5;
+    display:-webkit-box;
+    -webkit-line-clamp:2;
+    -webkit-box-orient:vertical;
+    overflow:hidden;
+  }
+
+  .meta{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+  }
+
+  .meta .btn{
+    width:auto;
+    min-width:120px;
+    text-align:center;
   }
   </style>
 </head>
