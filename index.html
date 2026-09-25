@@ -17,12 +17,16 @@
     .eyebrow{color:var(--accent);font-weight:800;font-size:13px}.hero h1{font-size:clamp(32px,5vw,54px);line-height:1.12;margin:10px 0 16px;letter-spacing:-.04em}
     .hero p{max-width:650px;color:#52525b;line-height:1.8;margin:0}
     .tools{display:flex;gap:10px;margin-top:24px;flex-wrap:wrap}.search{flex:1;min-width:230px;padding:14px 16px;border:1px solid var(--line);border-radius:12px;font-size:16px;background:#fff}
-    .btn{border:0;border-radius:12px;padding:13px 18px;background:var(--accent);color:#fff;font-weight:800;cursor:pointer}.btn.secondary{background:#fff;color:var(--text);border:1px solid var(--line)}
+    .btn{border:0;border-radius:10px;padding:11px 15px;background:var(--accent);color:#fff;font-weight:800;cursor:pointer;text-decoration:none;display:inline-block;transition:opacity .2s ease}
+.btn:hover{opacity:.85}.btn.secondary{background:#fff;color:var(--text);border:1px solid var(--line)}
     main{padding:36px 0 70px}.section-head{display:flex;align-items:end;justify-content:space-between;gap:16px;margin-bottom:18px}.section-head h2{margin:0;font-size:25px}.section-head p{margin:0;color:var(--muted);font-size:13px}
     .filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}.chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 13px;cursor:pointer}.chip.active{border-color:var(--accent);color:var(--accent);background:var(--accent2)}
     .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
-    .card{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column}
-    .thumb{aspect-ratio:4/3;background:linear-gradient(135deg,#f4f4f5,#e4e4e7);display:grid;place-items:center;color:#71717a;font-weight:800}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;transition:transform .2s ease,box-shadow .2s ease}
+.card:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(0,0,0,.08)}
+    .thumb{aspect-ratio:4/3;background:#fff;display:grid;place-items:center;color:#71717a;font-weight:800;padding:12px}
+.thumb img{transition:transform .25s ease}
+.card:hover .thumb img{transform:scale(1.04)}
     .body{padding:18px}.tag{font-size:11px;color:var(--accent);font-weight:800}.card h3{font-size:18px;margin:7px 0}.card p{font-size:14px;line-height:1.65;color:#52525b;margin:0 0 16px}.meta{display:flex;justify-content:space-between;align-items:center;gap:10px}.price{font-weight:900}.affiliate{font-size:11px;color:var(--muted);margin-top:10px}
     .empty{display:none;padding:35px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:16px}
     .note{margin-top:36px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;color:#52525b;font-size:13px;line-height:1.7}
@@ -38,12 +42,12 @@
 </div></header>
 
 <section class="hero"><div class="wrap">
-  <div class="eyebrow">JAPAN LIFE GOODS</div>
-  <h1>日本での暮らしを、<br>もっと便利に。</h1>
-  <p>一人暮らし・学生生活・日常生活で役立つ便利グッズを、用途別にわかりやすく紹介します。</p>
+  <div class="eyebrow">暮らし便利帳｜JAPAN LIFE</div>
+  <h1>暮らしを、もっと<br>便利に。</h1>
+  <p>日本での一人暮らし・学生生活・日常生活を、もっと快適にする便利グッズを紹介します。</p>
   <div class="tools">
-    <input id="search" class="search" type="search" placeholder="商品・用途を検索…">
-    <button id="clear" class="btn secondary" type="button">検索をクリア</button>
+    <input id="search" class="search" type="search" placeholder="商品名・用途・カテゴリから探す…">
+    <button id="clear" class="btn secondary" type="button">検索をリセット</button>
   </div>
 </div></section>
 
@@ -52,15 +56,6 @@
   <div id="filters" class="filters"></div>
   <div id="grid" class="grid"></div>
   <div id="empty" class="empty">条件に合う商品がありません。</div>
-
-  
-  <section id="rakuten-live" class="note" style="margin-top:24px;">
-    <h2 style="margin:0 0 10px;font-size:22px;">楽天おすすめ商品</h2>
-    <p style="margin:0 0 16px;color:#52525b;font-size:13px;">収納・整理に役立つアイテム</p>
-    <div style="overflow:auto;max-width:100%;"><table border="0" cellpadding="0" cellspacing="0"><tr><td><div style="border:1px solid #95a5a6;border-radius:.75rem;background-color:#FFFFFF;width:504px;margin:0px;padding:5px;text-align:center;overflow:hidden;"><table><tr><td style="width:240px"><a href="https://hb.afl.rakuten.co.jp/ichiba/57e271c4.b6064d29.57e271c6.79e5b51f/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frack-kan%2F1898536%2F&link_type=picttext&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJwaWN0dGV4dCIsInNpemUiOiIyNDB4MjQwIiwibmFtIjoxLCJuYW1wIjoicmlnaHQiLCJjb20iOjEsImNvbXAiOiJkb3duIiwicHJpY2UiOjEsImJvciI6MSwiY29sIjoxLCJiYnRuIjoxLCJwcm9kIjowLCJhbXAiOmZhbHNlfQ%3D%3D" target="_blank" rel="nofollow sponsored noopener" style="word-wrap:break-word;"><img src="https://hbb.afl.rakuten.co.jp/hgb/57e271c4.b6064d29.57e271c6.79e5b51f/?me_id=1201534&item_id=10091813&pc=https%3A%2F%2Fthumbnail.image.rakuten.co.jp%2F%400_mall%2Frack-kan%2Fcabinet%2Fsamune01%2Fimgrc0119521739.jpg%3F_ex%3D240x240&s=240x240&t=picttext" border="0" style="margin:2px" alt="[商品価格に関しましては、リンクが作成された時点と現時点で情報が変更されている場合がございます。]" title="[商品価格に関しましては、リンクが作成された時点と現時点で情報が変更されている場合がございます。]"></a></td><td style="vertical-align:top;width:248px;display: block;"><p style="font-size:12px;line-height:1.4em;text-align:left;margin:0px;padding:2px 6px;word-wrap:break-word"><a href="https://hb.afl.rakuten.co.jp/ichiba/57e271c4.b6064d29.57e271c6.79e5b51f/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frack-kan%2F1898536%2F&link_type=picttext&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJwaWN0dGV4dCIsInNpemUiOiIyNDB4MjQwIiwibmFtIjoxLCJuYW1wIjoicmlnaHQiLCJjb20iOjEsImNvbXAiOjEsImNvbXAiOiJkb3duIiwicHJpY2UiOjEsImJvciI6MSwiY29sIjoxLCJiYnRuIjoxLCJwcm9kIjowLCJhbXAiOmZhbHNlfQ%3D%3D" target="_blank" rel="nofollow sponsored noopener" style="word-wrap:break-word;">【5％OFFクーポン★28日10時迄】収納ボックス 収納ケース 3個セット 6個セット12個 引き出し 小物 衣装ケース アイリスオーヤマ プラスチック 押入れ 幅39cm 奥行50cm 高さ23.2cm チェスト 寝室 子供部屋 洗面所 ランドリーチェスト 衣類収納 タンス 新生活BC-L</a><br><span>価格：4,480円～（税込、送料無料）</span> <span style="color:#BBB">(2026/9/25時点)</span></p><div style="margin:10px;"><a href="https://hb.afl.rakuten.co.jp/ichiba/57e271c4.b6064d29.57e271c6.79e5b51f/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frack-kan%2F1898536%2F&link_type=picttext&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJwaWN0dGV4dCIsInNpemUiOiIyNDB4MjQwIiwibmFtIjoxLCJuYW1wIjoicmlnaHQiLCJjb20iOjEsImNvbXAiOiJkb3duIiwicHJpY2UiOjEsImJvciI6MSwiY29sIjoxLCJiYnRuIjoxLCJwcm9kIjowLCJhbXAiOmZhbHNlfQ%3D%3D" target="_blank" rel="nofollow sponsored noopener" style="word-wrap:break-word;"><img src="https://static.affiliate.rakuten.co.jp/makelink/rl.svg" style="float:left;max-height:27px;width:auto;margin-top:0"></a><a href="https://hb.afl.rakuten.co.jp/ichiba/57e271c4.b6064d29.57e271c6.79e5b51f/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frack-kan%2F1898536%2F%3Fscid%3Daf_pc_bbtn&link_type=picttext&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJwaWN0dGV4dCIsInNpemUiOiIyNDB4MjQwIiwibmFtIjoxLCJuYW1wIjoicmlnaHQiLCJjb20iOjEsImNvbXAiOiJkb3duIiwicHJpY2UiOjEsImJvciI6MSwiY29sIjoxLCJiYnRuIjoxLCJwcm9kIjowLCJhbXAiOmZhbHNlfQ==" target="_blank" rel="nofollow sponsored noopener" style="word-wrap:break-word;"><div style="float:right;width:41%;height:27px;background-color:#bf0000;color:#fff!important;font-size:12px;font-weight:500;line-height:27px;margin-left:1px;padding: 0 12px;border-radius:16px;cursor:pointer;text-align:center;"> 楽天で購入 </div></a></div></td></tr></table></div><br><p style="color:#000000;font-size:12px;line-height:1.4em;margin:5px;word-wrap:break-word"></p></td></tr></table></div>
-    <p style="font-size:11px;color:#71717a;margin:12px 0 0;">PR / アフィリエイト広告</p>
-  </section>
-
   <div id="about" class="note">
     <strong>サイトについて</strong><br>
     このサイトでは、日常生活で便利な商品やサービスを紹介しています。商品情報・価格・在庫などは購入前に販売ページでご確認ください。
@@ -116,7 +111,7 @@ function render(){
     const card=document.createElement("article");
     card.className="card";
     const image = p.image
-      ? `<img src="${escapeHtml(p.image)}" alt="${escapeHtml(p.title)}" style="width:100%;height:100%;object-fit:cover;" loading="lazy">`
+      ? `<img src="${escapeHtml(p.image)}" alt="${escapeHtml(p.title)}" style="width:100%;height:100%;object-fit:contain;" loading="lazy" decoding="async" loading="lazy">`
       : "IMAGE";
     const button = p.url && p.url !== "#"
       ? `<a class="btn" href="${escapeHtml(p.url)}" target="_blank" rel="nofollow sponsored noopener">楽天で見る</a>`

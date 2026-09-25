@@ -14,12 +14,12 @@ ACCESS_KEY = os.environ["RAKUTEN_ACCESS_KEY"]
 AFFILIATE_ID = os.environ["RAKUTEN_AFFILIATE_ID"]
 
 SEARCHES = [
-    ("収納", "収納"),
-    ("キッチン 便利", "キッチン"),
-    ("掃除 便利", "掃除"),
-    ("一人暮らし 便利", "一人暮らし"),
-    ("デスク 便利", "PC・デスク"),
-    ("旅行 便利", "旅行"),
+    ("収納ボックス 収納ケース 整理", "収納"),
+("キッチン 便利グッズ 調理 収納", "キッチン"),
+("掃除 便利グッズ 排水 掃除", "掃除"),
+("一人暮らし 便利グッズ 省スペース", "一人暮らし"),
+("PC デスク 便利グッズ", "PC・デスク"),
+("旅行 トラベル 便利グッズ", "旅行"),
 ]
 
 def api_search(keyword):
@@ -30,7 +30,7 @@ def api_search(keyword):
         "accessKey": ACCESS_KEY,
         "affiliateId": AFFILIATE_ID,
         "keyword": keyword,
-        "hits": "10",
+        "hits": "8",
         "page": "1",
         "availability": "1",
         "imageFlag": "1",
@@ -103,7 +103,7 @@ def main():
                     or []
                 )
 
-                image = image_urls[0] if image_urls else ""
+                image = image_urls[0].split("?_ex=")[0] if image_urls else ""
 
                 price = item.get("itemPrice")
 
@@ -139,7 +139,7 @@ def main():
                 file=sys.stderr
             )
 
-        time.sleep(0.5)
+        time.sleep(2.0)
 
     products = list(found.values())
 
