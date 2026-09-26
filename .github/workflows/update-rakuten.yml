@@ -24,7 +24,7 @@ jobs:
         run: python scripts/update_products.py
 
       - name: Commit updated products
-        shell: pwsh
+        shell: shell: powershell
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
