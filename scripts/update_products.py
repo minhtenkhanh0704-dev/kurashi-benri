@@ -101,8 +101,7 @@ def main():
                 if not item.get("itemName"):
                     continue
 
-                if not image:
-                    continue
+            
 
                 candidate = {
                     "id": code,
