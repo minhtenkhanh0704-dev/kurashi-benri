@@ -24,26 +24,15 @@ SEARCHES = [
 
 def api_search(keyword):
     params = {
-        "format": "json",
-        "formatVersion": "2",
-        "applicationId": APPLICATION_ID,
-        "accessKey": ACCESS_KEY,
-        "affiliateId": AFFILIATE_ID,
-        "keyword": keyword,
-        "hits": "8",
-        "page": "1",
-        "availability": "1",
-        "imageFlag": "1",
-        "hasReviewFlag": "1",
-        "sort": "-reviewCount",
-    }
-
+    "format": "json",
+    "keyword": keyword,
+    "applicationId": APPLICATION_ID,
+    "accessKey": ACCESS_KEY,
+    "affiliateId": AFFILIATE_ID,
+}
     url = API_URL + "?" + urlencode(params)
 
-    req = Request(
-        url,
-        headers={"User-Agent": "kurashi-benri/1.0"}
-    )
+    req = Request(url)
 
     with urlopen(req, timeout=30) as response:
         return json.load(response)
