@@ -28,7 +28,6 @@ def api_search(keyword):
     "keyword": keyword,
     "applicationId": APPLICATION_ID,
     "accessKey": ACCESS_KEY,
-    "affiliateId": AFFILIATE_ID,
 }
     url = API_URL + "?" + urlencode(params)
 
