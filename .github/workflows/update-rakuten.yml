@@ -16,8 +16,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-    
-
       - name: Fetch Rakuten products
         env:
           RAKUTEN_APPLICATION_ID: ${{ secrets.RAKUTEN_APPLICATION_ID }}
@@ -26,16 +24,19 @@ jobs:
         run: python scripts/update_products.py
 
       - name: Commit updated products
-  shell: bash
-  run: |
-    git config user.name "github-actions[bot]"
-    git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        shell: pwsh
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-    git add products.json
+          git add products.json
 
-    if git diff --cached --quiet; then
-      echo "No product changes."
-    else
-      git commit -m "chore: update Rakuten products"
-      git push
-    fi
+          git diff --cached --quiet
+
+          if ($LASTEXITCODE -eq 0) {
+            Write-Host "No product changes."
+          }
+          else {
+            git commit -m "chore: update Rakuten products"
+            git push
+          }
