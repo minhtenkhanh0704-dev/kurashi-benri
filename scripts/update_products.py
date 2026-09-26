@@ -45,23 +45,17 @@ def clean_title(title):
 
 
 def make_desc(item):
-    rate = item.get("affiliateRate")
-    reviews = item.get("reviewCount", 0)
     rating = item.get("reviewAverage")
+    reviews = item.get("reviewCount", 0)
 
-    bits = []
-
-    if rating:
-        bits.append(f"評価{rating}")
-
-    if reviews:
-        bits.append(f"レビュー{reviews:,}件")
-
-    if rate:
-        bits.append(f"アフィリエイト料率{rate}%")
-
-    return " / ".join(bits) if bits else "楽天市場で購入できる便利アイテム。"
-
+    if rating and reviews:
+        return f"★{rating}｜{reviews:,}件のレビュー"
+    elif rating:
+        return f"★{rating}"
+    elif reviews:
+        return f"{reviews:,}件のレビュー"
+    else:
+        return "楽天市場で人気の便利アイテム。"
 
 def main():
     found = {}
