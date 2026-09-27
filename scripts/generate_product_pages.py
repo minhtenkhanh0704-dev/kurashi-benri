@@ -356,15 +356,18 @@ footer{{padding:25px 0;border-top:1px solid var(--line);color:var(--muted);font-
 def main():
     data = json.loads(PRODUCTS_FILE.read_text(encoding="utf-8"))
     products = data.get("products", [])
-    PRODUCTS_DIR.mkdir(exist_ok=True)
-CATEGORIES_DIR.mkdir(exist_ok=True)
 
-for old in CATEGORIES_DIR.glob("*.html"):
-    old.unlink()
+    PRODUCTS_DIR.mkdir(exist_ok=True)
+    CATEGORIES_DIR.mkdir(exist_ok=True)
+
+    for old in CATEGORIES_DIR.glob("*.html"):
+        old.unlink()
+
     for old in PRODUCTS_DIR.glob("*.html"):
         old.unlink()
 
     urls = [f"{BASE_URL}/"]
+
     categories = []
 
     for product in products:
@@ -384,27 +387,40 @@ for old in CATEGORIES_DIR.glob("*.html"):
         urls.append(
             f"{BASE_URL}/categories/{slug}.html"
         )
+
     for product in products:
         slug = slug_for(product)
+
         (PRODUCTS_DIR / f"{slug}.html").write_text(
-            page_html(product, slug, products), encoding="utf-8"
+            page_html(product, slug, products),
+            encoding="utf-8"
         )
-        urls.append(f"{BASE_URL}/products/{slug}.html")
+
+        urls.append(
+            f"{BASE_URL}/products/{slug}.html"
+        )
 
     lines = [
         '<?xml version="1.0" encoding="UTF-8"?>',
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
         f"  <url><loc>{BASE_URL}/</loc><lastmod>{TODAY}</lastmod><changefreq>daily</changefreq><priority>1.0</priority></url>",
     ]
+
     for url in urls[1:]:
         lines.append(
             f"  <url><loc>{escape(url)}</loc><lastmod>{TODAY}</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>"
         )
+
     lines.append("</urlset>")
-    SITEMAP_FILE.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
-    print(f"Generated {len(products)} product pages and sitemap with {len(urls)} URLs.")
+    SITEMAP_FILE.write_text(
+        "\n".join(lines) + "\n",
+        encoding="utf-8"
+    )
 
+    print(
+        f"Generated {len(products)} product pages and sitemap with {len(urls)} URLs."
+    )
 
 if __name__ == "__main__":
     main()
