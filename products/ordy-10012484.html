@@ -26,7 +26,62 @@ main{padding:30px 0 70px}.crumb{font-size:13px;color:var(--muted);margin-bottom:
 h1{font-size:clamp(26px,5vw,42px);line-height:1.35;margin:0 0 16px}.desc{color:#52525b;line-height:1.8}
 .price{font-size:24px;font-weight:900;margin:20px 0}.note{color:var(--muted);font-size:13px;line-height:1.7}
 .buy{display:inline-block;margin-top:12px;padding:13px 18px;background:var(--accent);color:#fff;text-decoration:none;border-radius:10px;font-weight:800}
-.buy.disabled{background:#ddd;color:#555}footer{padding:25px 0;border-top:1px solid var(--line);color:var(--muted);font-size:12px;background:#fff}
+.buy.disabled{background:#ddd;color:#555}
+
+.related{margin-top:30px}
+.related h2{font-size:22px;margin:0 0 14px}
+
+.related-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:12px;
+}
+
+.related-card{
+  display:block;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:14px;
+  overflow:hidden;
+  text-decoration:none;
+  color:inherit;
+}
+
+.related-image{
+  aspect-ratio:4/3;
+  display:grid;
+  place-items:center;
+  background:#fff;
+  padding:8px;
+}
+
+.related-image img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+}
+
+.related-cat{
+  padding:10px 12px 0;
+  color:var(--accent);
+  font-size:11px;
+  font-weight:800;
+}
+
+.related-title{
+  padding:5px 12px 12px;
+  font-size:14px;
+  font-weight:800;
+  line-height:1.45;
+}
+
+@media(max-width:700px){
+  .related-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+}
+
+footer{padding:25px 0;border-top:1px solid var(--line);color:var(--muted);font-size:12px;background:#fff}
 @media(max-width:540px){.wrap{padding:0 14px}.body{padding:18px}}
 </style>
 </head>
