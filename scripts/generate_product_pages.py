@@ -186,11 +186,11 @@ h1{{font-size:clamp(26px,5vw,42px);line-height:1.35;margin:0 0 16px}}.desc{{colo
   font-weight:800;
   line-height:1.45;
 }}
-.related-price{
+.related-price{{
   padding:0 12px 14px;
   font-size:16px;
   font-weight:900;
-}
+}}
 @media(max-width:700px){{
   .related-grid{{
     grid-template-columns:repeat(2,minmax(0,1fr));
