@@ -95,12 +95,13 @@ def page_html(product, slug, all_products):
             )
 
             cards.append(
-                f'<a class="related-card" href="{BASE_URL}/products/{rslug}.html">'
-                f'<div class="related-image">{rimage_html}</div>'
-                f'<div class="related-cat">{escape(rcat)}</div>'
-                f'<div class="related-title">{escape(rtitle)}</div>'
-                '</a>'
-            )
+    f'<a class="related-card" href="{BASE_URL}/products/{rslug}.html">'
+    f'<div class="related-image">{rimage_html}</div>'
+    f'<div class="related-cat">{escape(rcat)}</div>'
+    f'<div class="related-title">{escape(rtitle)}</div>'
+    f'<div class="related-price">{escape(str(p.get("price") or "価格は商品ページで確認"))}</div>'
+    '</a>'
+)
 
         related_cards = (
             '<section class="related">'
@@ -185,7 +186,11 @@ h1{{font-size:clamp(26px,5vw,42px);line-height:1.35;margin:0 0 16px}}.desc{{colo
   font-weight:800;
   line-height:1.45;
 }}
-
+.related-price{
+  padding:0 12px 14px;
+  font-size:16px;
+  font-weight:900;
+}
 @media(max-width:700px){{
   .related-grid{{
     grid-template-columns:repeat(2,minmax(0,1fr));
