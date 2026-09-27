@@ -264,7 +264,9 @@ main{{padding:30px 0 70px}}.crumb{{font-size:13px;color:var(--muted);margin-bott
 .photo{{background:#fff;padding:20px;text-align:center}}.photo img{{max-width:100%;height:auto;max-height:520px;object-fit:contain}}
 .body{{padding:24px}}.tag{{display:inline-block;color:var(--accent);font-weight:800;font-size:13px;margin-bottom:8px}}
 h1{{font-size:clamp(26px,5vw,42px);line-height:1.35;margin:0 0 16px}}.desc{{color:#52525b;line-height:1.8}}
-.price{{font-size:24px;font-weight:900;margin:20px 0}}.note{{color:var(--muted);font-size:13px;line-height:1.7}}
+.price{{font-size:24px;font-weight:900;margin:20px 0}}.highlights{{margin:24px 0;padding:18px;background:#fff7f7;border:1px solid #ffd6d6;border-radius:14px}}
+.highlights h2{{font-size:18px;margin:0 0 10px}}
+.highlights ul{{margin:0;padding-left:20px;color:#52525b;line-height:1.8}}.note{{color:var(--muted);font-size:13px;line-height:1.7}}
 .buy{{display:inline-block;margin-top:12px;padding:13px 18px;background:var(--accent);color:#fff;text-decoration:none;border-radius:10px;font-weight:800}}
 .buy.disabled{{background:#ddd;color:#555}}
 
@@ -339,6 +341,16 @@ footer{{padding:25px 0;border-top:1px solid var(--line);color:var(--muted);font-
 <div class="tag">{escape(category)}</div>
 <h1>{escape(title)}</h1>
 <p class="desc">{escape(desc)}</p>
+
+<div class="highlights">
+  <h2>おすすめポイント</h2>
+  <ul>
+    <li>{escape(desc)}</li>
+    <li>{escape(category)}で使いやすい便利アイテム</li>
+    <li>一人暮らしや毎日の生活にも取り入れやすい商品</li>
+  </ul>
+</div>
+
 <div class="price">{escape(price)}</div>
 <p class="note">商品情報・価格・在庫・仕様は変わる場合があります。購入前に楽天市場の商品ページで最新情報をご確認ください。</p>
 {buy_html}
