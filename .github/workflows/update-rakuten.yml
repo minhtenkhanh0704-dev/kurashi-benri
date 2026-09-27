@@ -23,20 +23,26 @@ jobs:
           RAKUTEN_AFFILIATE_ID: ${{ secrets.RAKUTEN_AFFILIATE_ID }}
         run: python scripts/update_products.py
 
-      - name: Commit updated products
+            - name: Generate SEO product pages and sitemap
+        run: python scripts/generate_product_pages.py
+
+      - name: Commit updated products and SEO pages
         shell: powershell
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add products.json
+          git add products.json products sitemap.xml
 
           git diff --cached --quiet
 
           if ($LASTEXITCODE -eq 0) {
-            Write-Host "No product changes."
+            Write-Host "No product or SEO changes."
           }
           else {
+            git commit -m "chore: update Rakuten products and SEO pages"
+            git push
+          }
             git commit -m "chore: update Rakuten products"
             git push
           }
