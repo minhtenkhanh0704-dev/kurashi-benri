@@ -222,7 +222,10 @@ const fallbackProducts = [
 
 const state={cat:"すべて",q:""};
 const filters=document.querySelector("#filters"),grid=document.querySelector("#grid"),empty=document.querySelector("#empty"),count=document.querySelector("#count"),search=document.querySelector("#search");
-
+function productSlug(product){
+  const raw = String(product.id || "");
+  return raw.replace(/[^A-Za-z0-9_-]+/g, "-").replace(/^[-_]+|[-_]+$/g, "").toLowerCase() || "product";
+}
 function escapeHtml(value){
   return String(value ?? "").replace(/[&<>"']/g, c => ({
     "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
@@ -260,10 +263,16 @@ function render(){
     const button = p.url && p.url !== "#"
       ? `<a class="btn" href="${escapeHtml(p.url)}" target="_blank" rel="nofollow sponsored noopener">楽天で見る</a>`
       : `<span class="btn secondary">準備中</span>`;
-    card.innerHTML=`<div class="thumb">${image}</div>
+    const detailUrl = `./products/${productSlug(p)}.html`;
+
+card.innerHTML=`<div class="thumb">${image}</div>
       <div class="body"><div class="tag">${escapeHtml(p.cat)}</div>
-      <h3>${escapeHtml(p.title)}</h3><p>${escapeHtml(p.desc)}</p>
-      <div class="meta"><span class="price">${escapeHtml(p.price)}</span>${button}</div>
+      <h3><a href="${detailUrl}" style="text-decoration:none">${escapeHtml(p.title)}</a></h3>
+      <p>${escapeHtml(p.desc)}</p>
+      <div class="meta">
+        <span class="price">${escapeHtml(p.price)}</span>
+        <a class="btn secondary" href="${detailUrl}">詳細を見る</a>
+      </div>
       <div class="affiliate">PR / アフィリエイトリンク</div></div>`;
     grid.appendChild(card);
   });
