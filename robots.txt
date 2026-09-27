@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://minhtenkhanh0704-dev.github.io/kurashi-benri/sitemap.xml
