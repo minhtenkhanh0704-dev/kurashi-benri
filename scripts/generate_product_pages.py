@@ -23,7 +23,7 @@ def price_number(value):
     return m.group(0).replace(",", "") if m else None
 
 
-def page_html(product, slug):
+def page_html(product, slug, all_products):
     title = str(product.get("title") or "おすすめ商品").strip()
     category = str(product.get("cat") or "便利グッズ").strip()
     desc = str(product.get("desc") or "楽天市場で人気の便利アイテム。").strip()
@@ -64,7 +64,51 @@ def page_html(product, slug):
         if url != "#" else
         '<span class="buy disabled">商品ページ準備中</span>'
     )
+    related = [
+        p for p in all_products
+        if slug_for(p) != slug
+        and str(p.get("cat") or "便利グッズ").strip() == category
+    ][:4]
 
+    if len(related) < 4:
+        for p in all_products:
+            if slug_for(p) == slug or p in related:
+                continue
+            related.append(p)
+            if len(related) >= 4:
+                break
+
+    related_cards = ""
+    if related:
+        cards = []
+        for p in related:
+            rslug = slug_for(p)
+            rtitle = str(p.get("title") or "おすすめ商品").strip()
+            rcat = str(p.get("cat") or "便利グッズ").strip()
+            rimage = str(p.get("image") or "").strip()
+
+            rimage_html = (
+                f'<img src="{escape(rimage, quote=True)}" '
+                f'alt="{escape(rtitle, quote=True)}" '
+                'width="220" height="165" loading="lazy" decoding="async">'
+                if rimage else ""
+            )
+
+            cards.append(
+                f'<a class="related-card" href="{BASE_URL}/products/{rslug}.html">'
+                f'<div class="related-image">{rimage_html}</div>'
+                f'<div class="related-cat">{escape(rcat)}</div>'
+                f'<div class="related-title">{escape(rtitle)}</div>'
+                '</a>'
+            )
+
+        related_cards = (
+            '<section class="related">'
+            '<h2>こちらの商品もおすすめ</h2>'
+            '<div class="related-grid">'
+            + "".join(cards) +
+            '</div></section>'
+        )
     return f"""<!doctype html>
 <html lang="ja">
 <head>
@@ -113,6 +157,7 @@ h1{{font-size:clamp(26px,5vw,42px);line-height:1.35;margin:0 0 16px}}.desc{{colo
 <p class="note">PR：当ページにはアフィリエイトリンクが含まれます。</p>
 </div>
 </article>
+{related_cards}
 </div></main>
 <footer><div class="wrap">© 2026 暮らし便利帳</div></footer>
 </body>
@@ -132,7 +177,7 @@ def main():
     for product in products:
         slug = slug_for(product)
         (PRODUCTS_DIR / f"{slug}.html").write_text(
-            page_html(product, slug), encoding="utf-8"
+            page_html(product, slug, products), encoding="utf-8"
         )
         urls.append(f"{BASE_URL}/products/{slug}.html")
 
