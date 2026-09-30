@@ -171,37 +171,41 @@ def page_html(product, slug, all_products):
     if image:
         schema["image"] = [image]
     brand = str(product.get("brand") or "").strip()
-gtin = str(product.get("gtin") or "").strip()
-availability = product.get("availability")
+    gtin = str(product.get("gtin") or "").strip()
+    availability = product.get("availability")
 
-schema["category"] = category
-schema["url"] = canonical
+    schema["category"] = category
+    schema["url"] = canonical
 
-if brand:
-    schema["brand"] = {
-        "@type": "Brand",
-        "name": brand,
-    }
+    if brand:
+        schema["brand"] = {
+            "@type": "Brand",
+            "name": brand,
+        }
 
-if gtin:
-    schema["gtin"] = gtin
+    if gtin:
+        schema["gtin"] = gtin
 
-if price_value and url != "#":
-    offer = {
-        "@type": "Offer",
-        "url": url,
-        "priceCurrency": "JPY",
-        "price": price_value,
-    }
+    if price_value and url != "#":
+        offer = {
+            "@type": "Offer",
+            "url": url,
+            "priceCurrency": "JPY",
+            "price": price_value,
+        }
 
-    if availability in (1, "1", True):
-        offer["availability"] = "https://schema.org/InStock"
-    elif availability in (0, "0", False):
-        offer["availability"] = "https://schema.org/OutOfStock"
+        if availability in (1, "1", True):
+            offer["availability"] = "https://schema.org/InStock"
+        elif availability in (0, "0", False):
+            offer["availability"] = "https://schema.org/OutOfStock"
 
-    schema["offers"] = offer
+        schema["offers"] = offer
 
-    schema_json = json.dumps(schema, ensure_ascii=False, separators=(",", ":"))
+    schema_json = json.dumps(
+        schema,
+        ensure_ascii=False,
+        separators=(",", ":")
+    )
 
     image_html = (
         f'<img src="{escape(image, quote=True)}" alt="{escape(title, quote=True)}" '
@@ -215,6 +219,7 @@ if price_value and url != "#":
         if url != "#" else
         '<span class="buy disabled">商品ページ準備中</span>'
     )
+
     related = [
         p for p in all_products
         if slug_for(p) != slug
@@ -230,8 +235,10 @@ if price_value and url != "#":
                 break
 
     related_cards = ""
+
     if related:
         cards = []
+
         for p in related:
             rslug = slug_for(p)
             rtitle = str(p.get("title") or "おすすめ商品").strip()
@@ -246,22 +253,21 @@ if price_value and url != "#":
             )
 
             cards.append(
-    f'<a class="related-card" href="{BASE_URL}/products/{rslug}.html">'
-    f'<div class="related-image">{rimage_html}</div>'
-    f'<div class="related-cat">{escape(rcat)}</div>'
-    f'<div class="related-title">{escape(rtitle)}</div>'
-    f'<div class="related-price">{escape(str(p.get("price") or "価格は商品ページで確認"))}</div>'
-    '</a>'
-)
+                f'<a class="related-card" href="{BASE_URL}/products/{rslug}.html">'
+                f'<div class="related-image">{rimage_html}</div>'
+                f'<div class="related-cat">{escape(rcat)}</div>'
+                f'<div class="related-title">{escape(rtitle)}</div>'
+                f'<div class="related-price">{escape(str(p.get("price") or "価格は商品ページで確認"))}</div>'
+                '</a>'
+            )
 
         related_cards = (
             '<section class="related">'
             '<h2>こちらの商品もおすすめ</h2>'
             '<div class="related-grid">'
-            + "".join(cards) +
-            '</div></section>'
+            + "".join(cards)
+            + '</div></section>'
         )
-    return f"""<!doctype html>
 <html lang="ja">
 <head>
 <meta charset="utf-8">
