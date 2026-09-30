@@ -144,11 +144,33 @@ def main():
     seen_images = set()
     seen_titles = set()
 
-    def normalize_text(value):
-        return " ".join(str(value or "").lower().split())
+def normalize_text(value):
+    return " ".join(str(value or "").lower().split())
+
+
+def image_fingerprint(value):
+    value = str(value or "").strip().lower()
+
+    if not value:
+        return ""
+
+    # Rakuten image URLs often contain the shop name:
+    # /@0_mall/shop-name/cabinet/...
+    # Remove the shop name so the same product image
+    # sold by different shops gets the same fingerprint.
+    marker = "/@0_mall/"
+
+    if marker in value:
+        value = value.split(marker, 1)[1]
+        parts = value.split("/", 1)
+
+        if len(parts) == 2:
+            value = parts[1]
+
+    return value.split("?", 1)[0]
 
     for product in products:
-        image = normalize_text(product.get("image"))
+        image = image_fingerprint(product.get("image"))
         title = normalize_text(product.get("title"))
 
         # Same image = very likely the same product/listing.
@@ -179,7 +201,7 @@ def main():
     selected_titles = set()
 
     def add_unique(product):
-        image = normalize_text(product.get("image"))
+        image = image_fingerprint(product.get("image"))
         title = normalize_text(product.get("title"))
 
         if image and image in selected_images:
@@ -198,7 +220,7 @@ def main():
 
         return True
 
-    # Pick 4 genuinely different products from each category.
+    # Pick 8 genuinely different products per category.
     for _, category in SEARCHES:
         for product in by_cat.get(category, []):
             if len([p for p in selected if p["cat"] == category]) >= 8:
