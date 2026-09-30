@@ -170,13 +170,36 @@ def page_html(product, slug, all_products):
     }
     if image:
         schema["image"] = [image]
-    if price_value and url != "#":
-        schema["offers"] = {
-            "@type": "Offer",
-            "url": url,
-            "priceCurrency": "JPY",
-            "price": price_value,
-        }
+    brand = str(product.get("brand") or "").strip()
+gtin = str(product.get("gtin") or "").strip()
+availability = product.get("availability")
+
+schema["category"] = category
+schema["url"] = canonical
+
+if brand:
+    schema["brand"] = {
+        "@type": "Brand",
+        "name": brand,
+    }
+
+if gtin:
+    schema["gtin"] = gtin
+
+if price_value and url != "#":
+    offer = {
+        "@type": "Offer",
+        "url": url,
+        "priceCurrency": "JPY",
+        "price": price_value,
+    }
+
+    if availability in (1, "1", True):
+        offer["availability"] = "https://schema.org/InStock"
+    elif availability in (0, "0", False):
+        offer["availability"] = "https://schema.org/OutOfStock"
+
+    schema["offers"] = offer
 
     schema_json = json.dumps(schema, ensure_ascii=False, separators=(",", ":"))
 
