@@ -102,7 +102,7 @@ def main():
 
             
 
-                                candidate = {
+                candidate = {
                     "id": code,
                     "cat": category,
                     "title": clean_title(item["itemName"]),
