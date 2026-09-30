@@ -268,6 +268,7 @@ def page_html(product, slug, all_products):
             + "".join(cards)
             + '</div></section>'
         )
+    return f"""<!doctype html>
 <html lang="ja">
 <head>
 <meta charset="utf-8">
