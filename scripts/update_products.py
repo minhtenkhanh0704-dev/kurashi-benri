@@ -138,30 +138,83 @@ def main():
 
     products = list(found.values())
 
+    # Remove visually duplicated products.
+    # Different Rakuten item codes can still point to the same product/image.
+    unique_products = []
+    seen_images = set()
+    seen_titles = set()
+
+    def normalize_text(value):
+        return " ".join(str(value or "").lower().split())
+
+    for product in products:
+        image = normalize_text(product.get("image"))
+        title = normalize_text(product.get("title"))
+
+        # Same image = very likely the same product/listing.
+        if image and image in seen_images:
+            continue
+
+        # Exact same title = duplicate listing.
+        if title and title in seen_titles:
+            continue
+
+        if image:
+            seen_images.add(image)
+
+        if title:
+            seen_titles.add(title)
+
+        unique_products.append(product)
+
+    products = unique_products
+
     by_cat = {}
 
     for product in products:
         by_cat.setdefault(product["cat"], []).append(product)
 
     selected = []
+    selected_images = set()
+    selected_titles = set()
 
+    def add_unique(product):
+        image = normalize_text(product.get("image"))
+        title = normalize_text(product.get("title"))
+
+        if image and image in selected_images:
+            return False
+
+        if title and title in selected_titles:
+            return False
+
+        selected.append(product)
+
+        if image:
+            selected_images.add(image)
+
+        if title:
+            selected_titles.add(title)
+
+        return True
+
+    # Pick 4 genuinely different products from each category.
     for _, category in SEARCHES:
-        selected.extend(
-            by_cat.get(category, [])[:4]
-        )
+        for product in by_cat.get(category, []):
+            if len([p for p in selected if p["cat"] == category]) >= 8:
+                break
 
-    used = {p["id"] for p in selected}
+            add_unique(product)
 
+    # Fill remaining slots with other unique products.
     for product in products:
-        if len(selected) >= 24:
+        if len(selected) >= 48:
             break
 
-        if product["id"] not in used:
-            selected.append(product)
-            used.add(product["id"])
+        add_unique(product)
 
     payload = {
-        "products": selected[:24]
+        "products": selected[:48]
     }
 
     OUT.write_text(
@@ -174,7 +227,7 @@ def main():
     )
 
     print(
-        f"Wrote {len(selected[:24])} products to {OUT}"
+        f"Wrote {len(selected[:48])} products to {OUT}"
     )
 
 
