@@ -102,28 +102,28 @@ def main():
 
             
 
-                candidate = {
-    "id": code,
-    "cat": category,
-    "title": clean_title(item["itemName"]),
-    "desc": make_desc(item),
-    "price": (
-        f"{int(price):,}円"
-        if isinstance(price, (int, float))
-        else "価格は商品ページで確認"
-    ),
-    "url": affiliate_url,
-    "image": image,
-    "availability": item.get("availability"),
-    "updateTimestamp": item.get("updateTimestamp"),
-    "brand": item.get("brand"),
-    "gtin": item.get("gtin") or item.get("janCode"),
-}
+                                candidate = {
+                    "id": code,
+                    "cat": category,
+                    "title": clean_title(item["itemName"]),
+                    "desc": make_desc(item),
+                    "price": (
+                        f"{int(price):,}円"
+                        if isinstance(price, (int, float))
+                        else "価格は商品ページで確認"
+                    ),
+                    "url": affiliate_url,
+                    "image": image,
+                    "availability": item.get("availability"),
+                    "updateTimestamp": item.get("updateTimestamp"),
+                    "brand": item.get("brand"),
+                    "gtin": item.get("gtin") or item.get("janCode"),
+                }
 
-candidate = {
-    k: v for k, v in candidate.items()
-    if v not in (None, "")
-}
+                candidate = {
+                    k: v for k, v in candidate.items()
+                    if v not in (None, "")
+                }
 
                 if code not in found:
                     found[code] = candidate
