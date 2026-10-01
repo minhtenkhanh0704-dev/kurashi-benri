@@ -5,7 +5,7 @@ import time
 from pathlib import Path
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
-
+from urllib.error import HTTPError
 API_URL = "https://openapi.rakuten.co.jp/ichibams/api/IchibaItem/Search/20260701"
 OUT = Path("products.json")
 
@@ -24,22 +24,36 @@ SEARCHES = [
 
 def api_search(keyword):
     params = {
-    "format": "json",
-    "keyword": keyword,
-    "applicationId": APPLICATION_ID,
-    "accessKey": ACCESS_KEY,
-    "formatVersion": 2,
-    "hits": 30,
-    "sort": "-updateTimestamp",
-    "availability": 1,
-    "affiliateId": AFFILIATE_ID,
-}
+        "format": "json",
+        "keyword": keyword,
+        "applicationId": APPLICATION_ID,
+        "accessKey": ACCESS_KEY,
+        "formatVersion": 2,
+        "hits": 30,
+        "sort": "-updateTimestamp",
+        "availability": 1,
+        "affiliateId": AFFILIATE_ID,
+    }
+
     url = API_URL + "?" + urlencode(params)
 
-    req = Request(url)
+    req = Request(
+        url,
+        headers={
+            "User-Agent": "kurashi-benri/1.0",
+            "Accept": "application/json",
+        },
+    )
 
-    with urlopen(req, timeout=30) as response:
-        return json.load(response)
+    try:
+        with urlopen(req, timeout=30) as response:
+            return json.load(response)
+
+    except HTTPError as e:
+        body = e.read().decode("utf-8", errors="replace")
+        raise RuntimeError(
+            f"Rakuten API HTTP {e.code}: {body}"
+        ) from e
 
 
 def clean_title(title):
