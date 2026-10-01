@@ -226,7 +226,11 @@ def main():
             break
 
         add_unique(product)
-
+    if not selected:
+        raise RuntimeError(
+            "Rakuten API returned no products. "
+            "Refusing to overwrite products.json."
+        )
     payload = {
         "products": selected[:48]
     }
