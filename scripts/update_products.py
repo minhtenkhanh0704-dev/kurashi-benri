@@ -136,9 +136,8 @@ def main():
 
         time.sleep(2.0)
 
-       products = list(found.values())
+    products = list(found.values())
 
-    # Remove visually duplicated products.
     unique_products = []
     seen_images = set()
     seen_titles = set()
@@ -212,7 +211,6 @@ def main():
 
         return True
 
-    # Pick up to 8 genuinely different products per category.
     for _, category in SEARCHES:
         category_count = 0
 
@@ -223,7 +221,6 @@ def main():
             if add_unique(product):
                 category_count += 1
 
-    # Fill remaining slots with other unique products.
     for product in products:
         if len(selected) >= 48:
             break
