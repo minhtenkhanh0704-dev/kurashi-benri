@@ -147,7 +147,7 @@ def main():
                 f"[WARN] search failed: {keyword}: {e}",
                 file=sys.stderr
             )
-
+            raise
         time.sleep(2.0)
 
     products = list(found.values())
