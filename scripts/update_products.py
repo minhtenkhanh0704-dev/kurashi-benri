@@ -136,48 +136,40 @@ def main():
 
         time.sleep(2.0)
 
-    products = list(found.values())
+       products = list(found.values())
 
     # Remove visually duplicated products.
-    # Different Rakuten item codes can still point to the same product/image.
     unique_products = []
     seen_images = set()
     seen_titles = set()
 
-def normalize_text(value):
-    return " ".join(str(value or "").lower().split())
+    def normalize_text(value):
+        return " ".join(str(value or "").lower().split())
 
+    def image_fingerprint(value):
+        value = str(value or "").strip().lower()
 
-def image_fingerprint(value):
-    value = str(value or "").strip().lower()
+        if not value:
+            return ""
 
-    if not value:
-        return ""
+        marker = "/@0_mall/"
 
-    # Rakuten image URLs often contain the shop name:
-    # /@0_mall/shop-name/cabinet/...
-    # Remove the shop name so the same product image
-    # sold by different shops gets the same fingerprint.
-    marker = "/@0_mall/"
+        if marker in value:
+            value = value.split(marker, 1)[1]
+            parts = value.split("/", 1)
 
-    if marker in value:
-        value = value.split(marker, 1)[1]
-        parts = value.split("/", 1)
+            if len(parts) == 2:
+                value = parts[1]
 
-        if len(parts) == 2:
-            value = parts[1]
-
-    return value.split("?", 1)[0]
+        return value.split("?", 1)[0]
 
     for product in products:
         image = image_fingerprint(product.get("image"))
         title = normalize_text(product.get("title"))
 
-        # Same image = very likely the same product/listing.
         if image and image in seen_images:
             continue
 
-        # Exact same title = duplicate listing.
         if title and title in seen_titles:
             continue
 
@@ -220,13 +212,16 @@ def image_fingerprint(value):
 
         return True
 
-    # Pick 8 genuinely different products per category.
+    # Pick up to 8 genuinely different products per category.
     for _, category in SEARCHES:
+        category_count = 0
+
         for product in by_cat.get(category, []):
-            if len([p for p in selected if p["cat"] == category]) >= 8:
+            if category_count >= 8:
                 break
 
-            add_unique(product)
+            if add_unique(product):
+                category_count += 1
 
     # Fill remaining slots with other unique products.
     for product in products:
